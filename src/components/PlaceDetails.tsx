@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import {Card} from 'semantic-ui-react';
 
-export const PlaceDetails = () => {
+export const PlaceDetails = () : JSX.Element => {
 
     return (
         <Card>
