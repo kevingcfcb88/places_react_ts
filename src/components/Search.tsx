@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {Grid, Input}from 'semantic-ui-react';
+import {Grid, Input} from 'semantic-ui-react';
+
 
 interface IProps {
     request: Function;
@@ -15,7 +16,7 @@ export const SearchBar = ({request} : IProps) =>{
     }
 
     useEffect(()=>{
-        if(state !== ""){
+        if(state){
             request(state);
         }
     },[state]);
