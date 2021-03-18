@@ -9,16 +9,19 @@ interface IProps {
 export const SearchBar = ({request} : IProps) =>{
 
     const [state, setState] = useState("");
+    const [didMount, setDidMount] = useState(false)
 
     const setTemporalState= (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
+        console.warn(`SearchBar: ${event.target.value}`)
         setState(event.target.value);
     }
 
     useEffect(()=>{
-        if(state){
+        if(didMount){
             request(state);
         }
+        setDidMount(true);
     },[state]);
 
     return (

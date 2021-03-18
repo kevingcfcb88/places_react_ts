@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import 'semantic-ui-css/semantic.min.css'
 import {PlaceDetails} from './components/PlaceDetails';
 import {SearchBar} from './components/Search';
-import {Grid}from 'semantic-ui-react';
+import {Grid, Loader}from 'semantic-ui-react';
 import _ from 'lodash';
 import cities from 'cities.json';
 
@@ -16,32 +16,30 @@ interface ICity {
 function App() {
 
   const [searching, setSearching] = useState(false);
-  const [citiesResult, setCitiesResult] = useState<ICity>();
+  const [citiesJson, setCitiesJson] = useState<ICity[]>(Object.entries(cities).map(element => element[1]));
+  const [citiesResult, setCitiesResult] = useState<ICity[]>();
   const [queryParam, setQueryParam] = useState("");
 
-  const request = async (query:any) : Promise<ICity>  => {
+  const request = (query:any) : void  => {
     setSearching(true);
     setQueryParam(query);
-    let res : ICity | undefined = await _.find(cities, city => city["name"] === query);
-    console.warn(res);
-    if(res === undefined) res = {} as ICity;
-    setCitiesResult(res);
+    if(query.length >= 2){
+      setCitiesResult([]);
+      setCitiesResult(citiesJson.filter(c => c.name.toLowerCase().includes(query.toLowerCase())));
+    }
     setSearching(false);
-    return res;
   }
 
-  function results () : JSX.Element{
-    console.log(searching);
+  function results (): JSX.Element;
+  function results (): JSX.Element[];
+  function results (): any {
     if(!searching && queryParam.length > 0){
-      console.log("Results");
-      return (<div>{citiesResult?.name} - {citiesResult?.country}</div>)
+      if(citiesResult)
+      return citiesResult.map((c,i) => <div key={i}>{c?.name} - {c?.country}</div>);
     }else if(searching && queryParam.length > 0){
-      console.warn("Loading...");
-      return (<div>Loading...</div>)
-    }else{
-      return <div></div>;
+      return (<Loader active />)
     }
-    
+    return <div></div>;  
   }
 
   return (
