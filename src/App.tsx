@@ -6,7 +6,7 @@ import {Grid, Loader}from 'semantic-ui-react';
 import _ from 'lodash';
 import cities from 'cities.json';
 
-interface ICity {
+export interface ICity {
     country: string,
     name: string,
     lat: string,
@@ -30,12 +30,39 @@ function App() {
     setSearching(false);
   }
 
+  const drawRows = (details:any) : JSX.Element[] =>{
+    let jsxFinal : JSX.Element[] = [];
+    while(details.length > 0){
+      if(details.length % 2 == 0){
+        jsxFinal.push(
+          <Grid.Row>
+            {details.shift()}
+            {details.shift()}
+          </Grid.Row>
+        );
+      }
+      jsxFinal.push(
+        <Grid.Row>
+          {details.shift()}
+          {details.shift()}
+        </Grid.Row>
+      );
+    }
+    return jsxFinal;
+  }
+
   function results (): JSX.Element;
   function results (): JSX.Element[];
   function results (): any {
     if(!searching && queryParam.length > 0){
-      if(citiesResult)
-      return citiesResult.map((c,i) => <div key={i}>{c?.name} - {c?.country}</div>);
+      if(citiesResult){
+        const placeDetails = citiesResult.map((c,i) => <PlaceDetails key={i} city={c}/>);
+        return (
+          <Grid centered columns={2}>
+            {drawRows(placeDetails)}
+          </Grid>
+        )
+      }
     }else if(searching && queryParam.length > 0){
       return (<Loader active />)
     }
@@ -45,8 +72,10 @@ function App() {
   return (
     <Grid centered columns={2} >
       <SearchBar request={request}/>
-      <Grid.Row textAlign={'left'}>
-        {results()}
+      <Grid.Row textAlign={'center'}>
+        <Grid centered columns={2}>
+          {results()}
+        </Grid>
       </Grid.Row>
     </Grid>
   );

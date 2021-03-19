@@ -1,17 +1,26 @@
 import * as React from 'react';
-import {Card} from 'semantic-ui-react';
+import {Card, Grid} from 'semantic-ui-react';
+import { ICity } from '../App';
 
-export const PlaceDetails = () : JSX.Element => {
+interface IPlaceDetailsProps{
+    key: number,
+    city: ICity
+}
+
+export const PlaceDetails = ({key,city}:IPlaceDetailsProps) : JSX.Element => {
 
     return (
-        <Card>
-            <Card.Content textAlign={"left"}>
-                <Card.Header>Matthew Harris</Card.Header>
-                <Card.Meta>Co-Worker</Card.Meta>
-                <Card.Description>
-                Matthew is a pianist living in Nashville.
-                </Card.Description>
-            </Card.Content>
-        </Card>
+        <Grid.Column>
+            <Card>
+                <Card.Content textAlign={"left"} key={key}>
+                    <Card.Header>{city.name}</Card.Header>
+                    <Card.Meta>{city.country}</Card.Meta>
+                    <Card.Description>
+                        Latitud: {city.lat}
+                        Longitud: {city.lng} 
+                    </Card.Description>
+                </Card.Content>
+            </Card>
+        </Grid.Column>        
     );
 };
