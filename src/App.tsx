@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import 'semantic-ui-css/semantic.min.css'
 import {PlaceDetails} from './components/PlaceDetails';
 import {SearchBar} from './components/Search';
 import {Grid, Loader}from 'semantic-ui-react';
-import _ from 'lodash';
 import cities from 'cities.json';
 
 export interface ICity {
@@ -16,37 +15,56 @@ export interface ICity {
 function App() {
 
   const [searching, setSearching] = useState(false);
-  const [citiesJson, setCitiesJson] = useState<ICity[]>(Object.entries(cities).map(element => element[1]));
+  const [citiesJson, setCitiesJson] = useState<ICity[]>([]);
   const [citiesResult, setCitiesResult] = useState<ICity[]>();
   const [queryParam, setQueryParam] = useState("");
 
-  const request = (query:any) : void  => {
-    setSearching(true);
+  useEffect(()=>{
+    setCitiesJson(Object.entries(cities).map(element => element[1]));
+  },[]);
+
+  const request = (query:string) : void  => {
     setQueryParam(query);
     if(query.length >= 2){
+      setSearching(true);
       setCitiesResult([]);
-      setCitiesResult(citiesJson.filter(c => c.name.toLowerCase().includes(query.toLowerCase())));
+      findResults(query).then(result =>{
+        setCitiesResult(result);
+        setSearching(false);
+      });
+    }else{
+      setCitiesResult([]);
     }
-    setSearching(false);
   }
+
+  const findResults = (q:string) : Promise<ICity[]> => {
+    return new Promise((resolve, reject) => {
+      resolve(citiesJson.filter(c => c.name.toLowerCase().includes(q.toLowerCase())))
+      const a:ICity[] = [];
+      resolve(a);
+    });
+  };
 
   const drawRows = (details:any) : JSX.Element[] =>{
     let jsxFinal : JSX.Element[] = [];
+    let rowKey:number = 100;
     while(details.length > 0){
-      if(details.length % 2 == 0){
+      if(details.length % 2 === 0){
         jsxFinal.push(
-          <Grid.Row>
+          <Grid.Row key={rowKey}>
             {details.shift()}
             {details.shift()}
           </Grid.Row>
         );
       }
+      rowKey += 1;
       jsxFinal.push(
-        <Grid.Row>
+        <Grid.Row key={rowKey}>
           {details.shift()}
           {details.shift()}
         </Grid.Row>
       );
+      rowKey += 100;
     }
     return jsxFinal;
   }
@@ -56,10 +74,19 @@ function App() {
   function results (): any {
     if(!searching && queryParam.length > 0){
       if(citiesResult){
-        const placeDetails = citiesResult.map((c,i) => <PlaceDetails key={i} city={c}/>);
+        const placeDetails : ICity[] = [];
+
+        for (let i = 0; i < 10; i++){
+          if(citiesResult[i] !== undefined){
+            placeDetails.push(citiesResult[i]);
+          }
+        }
+        const tempArray:JSX.Element[] = placeDetails.map((c,i) => {
+          return <PlaceDetails keyInt={++i} city={c}/>
+        })
         return (
           <Grid centered columns={2}>
-            {drawRows(placeDetails)}
+            {drawRows(tempArray)}
           </Grid>
         )
       }

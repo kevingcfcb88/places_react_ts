@@ -13,7 +13,6 @@ export const SearchBar = ({request} : IProps) =>{
 
     const setTemporalState= (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
-        console.warn(`SearchBar: ${event.target.value}`)
         setState(event.target.value);
     }
 
@@ -22,6 +21,7 @@ export const SearchBar = ({request} : IProps) =>{
             request(state);
         }
         setDidMount(true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[state]);
 
     return (

@@ -3,20 +3,20 @@ import {Card, Grid} from 'semantic-ui-react';
 import { ICity } from '../App';
 
 interface IPlaceDetailsProps{
-    key: number,
+    keyInt: number,
     city: ICity
 }
 
-export const PlaceDetails = ({key,city}:IPlaceDetailsProps) : JSX.Element => {
-
+export const PlaceDetails = ({keyInt,city}:IPlaceDetailsProps) : JSX.Element => {
+    
     return (
-        <Grid.Column>
-            <Card>
-                <Card.Content textAlign={"left"} key={key}>
+        <Grid.Column key={keyInt}>
+            <Card key={keyInt}>
+                <Card.Content textAlign={"left"} key={keyInt}>
                     <Card.Header>{city.name}</Card.Header>
                     <Card.Meta>{city.country}</Card.Meta>
                     <Card.Description>
-                        Latitud: {city.lat}
+                        Latitud: {city.lat} <br/>
                         Longitud: {city.lng} 
                     </Card.Description>
                 </Card.Content>
