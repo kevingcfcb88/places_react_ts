@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import 'semantic-ui-css/semantic.min.css'
 import {PlaceDetails} from './components/PlaceDetails';
 import {SearchBar} from './components/Search';
+import {LocationMap} from './components/LocationMap';
 import {Grid, Loader}from 'semantic-ui-react';
 import cities from 'cities.json';
 
@@ -96,15 +97,22 @@ function App() {
     return <div></div>;  
   }
 
-  return (
-    <Grid centered columns={2} >
+  return (    
+    <Grid>
+    <Grid.Row>
+      <Grid.Column textAlign={'center'} width={8}>
       <SearchBar request={request}/>
-      <Grid.Row textAlign={'center'}>
-        <Grid centered columns={2}>
-          {results()}
-        </Grid>
-      </Grid.Row>
-    </Grid>
+          <Grid.Row textAlign={'center'}>
+            <Grid centered columns={2}>
+              {results()}
+            </Grid>
+          </Grid.Row>
+      </Grid.Column>
+      <Grid.Column width={8}>
+        <LocationMap />
+      </Grid.Column>
+    </Grid.Row>
+  </Grid>
   );
 }
 
