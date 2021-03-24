@@ -19,6 +19,7 @@ function App() {
   const [citiesJson, setCitiesJson] = useState<ICity[]>([]);
   const [citiesResult, setCitiesResult] = useState<ICity[]>();
   const [queryParam, setQueryParam] = useState("");
+  const [selectedCity, setSelectedCity] = useState(0);
 
   useEffect(()=>{
     setCitiesJson(Object.entries(cities).map(element => element[1]));
@@ -34,8 +35,15 @@ function App() {
         setSearching(false);
       });
     }else{
+      setSelectedCity(0)
       setCitiesResult([]);
     }
+  }
+
+  const clickedCity = (e:MouseEvent) =>{
+    e.preventDefault();
+    const tempString : string = ((e.currentTarget as HTMLElement).getAttribute('data-key'))!;
+    setSelectedCity(parseInt(tempString));
   }
 
   const findResults = (q:string) : Promise<ICity[]> => {
@@ -83,7 +91,7 @@ function App() {
           }
         }
         const tempArray:JSX.Element[] = placeDetails.map((c,i) => {
-          return <PlaceDetails keyInt={++i} city={c}/>
+          return <PlaceDetails keyInt={++i} city={c} clicked={clickedCity}/>
         })
         return (
           <Grid centered columns={2}>
@@ -95,6 +103,14 @@ function App() {
       return (<Loader active />)
     }
     return <div></div>;  
+  }
+
+  const drawingMap = ():JSX.Element => {
+    if(citiesResult && citiesResult.length && selectedCity !== 0){
+      const tempCity = citiesResult.filter( (v,i) => i+1 === selectedCity);
+      return  <LocationMap lat={parseInt(tempCity[0].lat)} lgt={parseInt(tempCity[0].lng)} city={tempCity[0].name} />
+    }
+    return <LocationMap lat={51.505} lgt={-0.09} city={"London"}/>
   }
 
   return (    
@@ -109,7 +125,7 @@ function App() {
           </Grid.Row>
       </Grid.Column>
       <Grid.Column width={8}>
-        <LocationMap />
+        {drawingMap()}
       </Grid.Column>
     </Grid.Row>
   </Grid>

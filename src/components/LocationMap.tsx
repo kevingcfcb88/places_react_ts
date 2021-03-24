@@ -1,21 +1,27 @@
-import * as React from 'react';
+import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 
-export const LocationMap = () : JSX.Element => {
+interface IPropsLocationMap{
+    lat: number,
+    lgt: number,
+    city:string
+}
+
+export const LocationMap = ({lat,lgt,city}:IPropsLocationMap) : JSX.Element => {
 
     return(
-        <div id="mapid" style={{ height: '180px' }}>
-            <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
-                <TileLayer
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker position={[41.388, 2.158]}>
-                <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-                </Marker>
-            </MapContainer>
-        </div>
+            <div id='mapid' style={{margin: 'auto', width: '100%', padding: '10px'}}>
+                <MapContainer center={[lat, lgt]} zoom={2} scrollWheelZoom={true} style={{minHeight: '600px'}}>
+                    <TileLayer
+                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={[lat, lgt]}>
+                    <Popup>
+                        {city}
+                    </Popup>
+                    </Marker>
+                </MapContainer>
+            </div>
     )
 };
