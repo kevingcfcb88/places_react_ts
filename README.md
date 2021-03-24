@@ -12,4 +12,4 @@ Search for the place and you will see it marked on the world map.
 - Typescript
 - Cities [JSON](https://github.com/lutangar/cities.json)
 - [React Leaflet](https://react-leaflet.js.org/)
-- [React Semantic UI] (https://react.semantic-ui.com/)
+- [React Semantic UI](https://react.semantic-ui.com/)
